@@ -1,0 +1,296 @@
+{
+    "categories": [
+        {
+            "product_category_id": 1,
+            "category_name": "Electronics"
+        },
+        {
+            "product_category_id": 2,
+            "category_name": "Fashion Accessories"
+        },
+        {
+            "product_category_id": 3,
+            "category_name": "Home Goods"
+        }
+    ],
+    "shipping_time_rating_data": [
+        {
+            "shipping_time": 1,
+            "product_category_id": 1,
+            "avg_rating": 2.8896
+        },
+        {
+            "shipping_time": 2,
+            "product_category_id": 1,
+            "avg_rating": 3.0769
+        },
+        {
+            "shipping_time": 3,
+            "product_category_id": 1,
+            "avg_rating": 2.9221
+        },
+        {
+            "shipping_time": 4,
+            "product_category_id": 1,
+            "avg_rating": 2.9689
+        },
+        {
+            "shipping_time": 5,
+            "product_category_id": 1,
+            "avg_rating": 2.8981
+        },
+        {
+            "shipping_time": 6,
+            "product_category_id": 1,
+            "avg_rating": 2.7697
+        },
+        {
+            "shipping_time": 7,
+            "product_category_id": 1,
+            "avg_rating": 2.8144
+        },
+        {
+            "shipping_time": 8,
+            "product_category_id": 1,
+            "avg_rating": 2.2938
+        },
+        {
+            "shipping_time": 9,
+            "product_category_id": 1,
+            "avg_rating": 2.0298
+        },
+        {
+            "shipping_time": 10,
+            "product_category_id": 1,
+            "avg_rating": 2.2303
+        },
+        {
+            "shipping_time": 1,
+            "product_category_id": 2,
+            "avg_rating": 2.8133
+        },
+        {
+            "shipping_time": 2,
+            "product_category_id": 2,
+            "avg_rating": 2.8425
+        },
+        {
+            "shipping_time": 3,
+            "product_category_id": 2,
+            "avg_rating": 2.8079
+        },
+        {
+            "shipping_time": 4,
+            "product_category_id": 2,
+            "avg_rating": 2.9557
+        },
+        {
+            "shipping_time": 5,
+            "product_category_id": 2,
+            "avg_rating": 2.908
+        },
+        {
+            "shipping_time": 6,
+            "product_category_id": 2,
+            "avg_rating": 3.1092
+        },
+        {
+            "shipping_time": 7,
+            "product_category_id": 2,
+            "avg_rating": 2.8662
+        },
+        {
+            "shipping_time": 8,
+            "product_category_id": 2,
+            "avg_rating": 2.0976
+        },
+        {
+            "shipping_time": 9,
+            "product_category_id": 2,
+            "avg_rating": 2.2645
+        },
+        {
+            "shipping_time": 10,
+            "product_category_id": 2,
+            "avg_rating": 2.2229
+        },
+        {
+            "shipping_time": 1,
+            "product_category_id": 3,
+            "avg_rating": 2.9264
+        },
+        {
+            "shipping_time": 2,
+            "product_category_id": 3,
+            "avg_rating": 3.0447
+        },
+        {
+            "shipping_time": 3,
+            "product_category_id": 3,
+            "avg_rating": 2.9718
+        },
+        {
+            "shipping_time": 4,
+            "product_category_id": 3,
+            "avg_rating": 2.9888
+        },
+        {
+            "shipping_time": 5,
+            "product_category_id": 3,
+            "avg_rating": 2.886
+        },
+        {
+            "shipping_time": 6,
+            "product_category_id": 3,
+            "avg_rating": 3.0449
+        },
+        {
+            "shipping_time": 7,
+            "product_category_id": 3,
+            "avg_rating": 2.9545
+        },
+        {
+            "shipping_time": 8,
+            "product_category_id": 3,
+            "avg_rating": 2.0577
+        },
+        {
+            "shipping_time": 9,
+            "product_category_id": 3,
+            "avg_rating": 2.1006
+        },
+        {
+            "shipping_time": 10,
+            "product_category_id": 3,
+            "avg_rating": 2.2632
+        }
+    ],
+    "suppliers": [
+        {
+            "supplier_id": 1,
+            "supplier_name": "A"
+        },
+        {
+            "supplier_id": 2,
+            "supplier_name": "B"
+        },
+        {
+            "supplier_id": 3,
+            "supplier_name": "C"
+        },
+        {
+            "supplier_id": 4,
+            "supplier_name": "D"
+        },
+        {
+            "supplier_id": 5,
+            "supplier_name": "E"
+        }
+    ],
+    "weather_conditions": [
+        {
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy"
+        },
+        {
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy"
+        },
+        {
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny"
+        }
+    ],
+    "shipping_time_by_supplier_weather": [
+        {
+            "supplier_id": 1,
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny",
+            "avg_shipping_time": 5.5408
+        },
+        {
+            "supplier_id": 1,
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy",
+            "avg_shipping_time": 5.6
+        },
+        {
+            "supplier_id": 1,
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy",
+            "avg_shipping_time": 5.5978
+        },
+        {
+            "supplier_id": 2,
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny",
+            "avg_shipping_time": 5.4082
+        },
+        {
+            "supplier_id": 2,
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy",
+            "avg_shipping_time": 5.6747
+        },
+        {
+            "supplier_id": 2,
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy",
+            "avg_shipping_time": 5.2386
+        },
+        {
+            "supplier_id": 3,
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny",
+            "avg_shipping_time": 5.4573
+        },
+        {
+            "supplier_id": 3,
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy",
+            "avg_shipping_time": 5.5302
+        },
+        {
+            "supplier_id": 3,
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy",
+            "avg_shipping_time": 5.2424
+        },
+        {
+            "supplier_id": 4,
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny",
+            "avg_shipping_time": 5.6121
+        },
+        {
+            "supplier_id": 4,
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy",
+            "avg_shipping_time": 5.5495
+        },
+        {
+            "supplier_id": 4,
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy",
+            "avg_shipping_time": 5.4757
+        },
+        {
+            "supplier_id": 5,
+            "weather_condition_id": 1,
+            "weather_condition_name": "Sunny",
+            "avg_shipping_time": 5.5476
+        },
+        {
+            "supplier_id": 5,
+            "weather_condition_id": 2,
+            "weather_condition_name": "Rainy",
+            "avg_shipping_time": 5.3641
+        },
+        {
+            "supplier_id": 5,
+            "weather_condition_id": 3,
+            "weather_condition_name": "Snowy",
+            "avg_shipping_time": 5.8818
+        }
+    ]
+}

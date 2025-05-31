@@ -1,0 +1,12 @@
+# Database configuration file with sensitive information
+config.json
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+.venv/
+venv/
+env/

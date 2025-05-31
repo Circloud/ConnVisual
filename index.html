@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shipping Analytics Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/framer-motion@11.0.0/dist/framer-motion.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .tech-gradient {
+            background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .card-gradient {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(5, 1fr);
+            grid-template-rows: 50px repeat(3, 1fr);
+            gap: 2px;
+            height: 350px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .heatmap-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .heatmap-header {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+        }
+        .heatmap-label {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            justify-content: flex-start;
+            padding-left: 10px;
+        }
+        .heatmap-value {
+            color: white;
+            font-size: 12px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        @media (min-width: 1200px) {
+            .container {
+                max-width: 1400px;
+            }
+            .chart-container {
+                height: 500px;
+            }
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white overflow-x-hidden">
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center gradient-bg relative">
+        <div class="absolute inset-0 bg-black opacity-20"></div>
+        <div class="container mx-auto px-6 text-center relative z-10" id="hero">
+            <h1 class="text-7xl font-bold mb-6 leading-tight">
+                Shipping Analytics
+                <span class="tech-gradient block">Intelligence</span>
+            </h1>
+            <p class="text-xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Transforming operational bottlenecks into strategic advantages through data-driven insights
+            </p>
+            <div class="flex justify-center space-x-8 text-center">
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="text-4xl font-bold tech-gradient">7</div>
+                    <div class="text-sm text-gray-300">Day Critical Threshold</div>
+                </div>
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="text-4xl font-bold tech-gradient">3</div>
+                    <div class="text-sm text-gray-300">Product Categories</div>
+                </div>
+                <div class="bg-white bg-opacity-10 p-6 rounded-lg backdrop-blur-sm">
+                    <div class="text-4xl font-bold tech-gradient">5</div>
+                    <div class="text-sm text-gray-300">Key Suppliers</div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2">
+            <i class="fas fa-chevron-down text-2xl animate-bounce"></i>
+        </div>
+    </section>
+
+    <!-- Key Insights Section -->
+    <section class="min-h-screen py-20 bg-gray-900 relative flex items-center">
+        <div class="container mx-auto px-6" id="insights">
+            <h2 class="text-6xl font-bold text-center mb-16">
+                Critical <span class="tech-gradient">Discoveries</span>
+            </h2>
+            
+            <div class="stats-grid mb-12">
+                <div class="card-gradient p-8 rounded-2xl" id="insight1">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-exclamation-triangle text-yellow-400 text-3xl mr-4"></i>
+                        <h3 class="text-2xl font-bold">Operational Bottleneck</h3>
+                    </div>
+                    <div class="text-5xl font-bold mb-4 tech-gradient">7+ Days</div>
+                    <p class="text-gray-300 text-lg mb-4">
+                        Shipping times exceeding 7 days cause a precipitous drop in customer ratings across all product categories
+                    </p>
+                    <div class="mt-6 space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Electronics avg ≤7 days:</span>
+                            <span class="text-green-400">2.86</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Electronics avg >7 days:</span>
+                            <span class="text-red-400">2.19</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Rating difference:</span>
+                            <span class="text-yellow-400">0.67 points</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-gradient p-8 rounded-2xl" id="insight2">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-cloud-rain text-blue-400 text-3xl mr-4"></i>
+                        <h3 class="text-2xl font-bold">Weather Impact</h3>
+                    </div>
+                    <div class="text-5xl font-bold mb-4 tech-gradient">5.88 Days</div>
+                    <p class="text-gray-300 text-lg mb-4">
+                        Supplier E's performance drops significantly during snowy conditions, highlighting weather vulnerability
+                    </p>
+                    <div class="mt-6 space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Best overall (sunny):</span>
+                            <span class="text-green-400">5.51 days</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Worst (E in snow):</span>
+                            <span class="text-red-400">5.88 days</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Performance gap:</span>
+                            <span class="text-yellow-400">0.37 days</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-gradient p-8 rounded-2xl" id="insight3">
+                    <div class="flex items-center mb-6">
+                        <i class="fas fa-chart-line text-green-400 text-3xl mr-4"></i>
+                        <h3 class="text-2xl font-bold">Category Differences</h3>
+                    </div>
+                    <div class="text-5xl font-bold mb-4 tech-gradient">3.11</div>
+                    <p class="text-gray-300 text-lg mb-4">
+                        Highest customer rating achieved by Fashion Accessories at 6-day shipping time
+                    </p>
+                    <div class="mt-6 space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Fashion peak (6 days):</span>
+                            <span class="text-green-400">3.11</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Electronics peak (2 days):</span>
+                            <span class="text-green-400">3.08</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Home Goods peak (6 days):</span>
+                            <span class="text-green-400">3.04</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Data Insights -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <div class="text-3xl font-bold tech-gradient mb-2">3.11</div>
+                    <div class="text-sm text-gray-400">Highest Rating</div>
+                    <div class="text-xs text-gray-500 mt-1">Fashion, 6 days</div>
+                </div>
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <div class="text-3xl font-bold tech-gradient mb-2">2.03</div>
+                    <div class="text-sm text-gray-400">Lowest Rating</div>
+                    <div class="text-xs text-gray-500 mt-1">Electronics, 9 days</div>
+                </div>
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <div class="text-3xl font-bold tech-gradient mb-2">5.24</div>
+                    <div class="text-sm text-gray-400">Fastest Delivery</div>
+                    <div class="text-xs text-gray-500 mt-1">Supplier B, Snow</div>
+                </div>
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <div class="text-3xl font-bold tech-gradient mb-2">5.67</div>
+                    <div class="text-sm text-gray-400">Slowest Delivery</div>
+                    <div class="text-xs text-gray-500 mt-1">Supplier B, Rainy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization 1: Shipping Time vs Rating -->
+    <section class="min-h-screen py-20 bg-gray-800 relative flex items-center">
+        <div class="container mx-auto px-6" id="chart1-section">
+            <h2 class="text-5xl font-bold text-center mb-16">
+                Shipping Time Impact on 
+                <span class="tech-gradient">Customer Satisfaction</span>
+            </h2>
+            
+            <div class="grid lg:grid-cols-3 gap-8 mb-8">
+                <div class="lg:col-span-2">
+                    <div class="card-gradient p-8 rounded-2xl">
+                        <div class="chart-container">
+                            <canvas id="ratingChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-cyan-400">Peak Performance</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Electronics (2 days):</span>
+                                <span class="text-green-400">3.08</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Fashion (6 days):</span>
+                                <span class="text-green-400">3.11</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Home Goods (6 days):</span>
+                                <span class="text-green-400">3.04</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-purple-400">7-Day Impact</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Electronics (≤7 vs >7):</span>
+                                <span class="text-red-400">2.86 vs 2.19</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Fashion (≤7 vs >7):</span>
+                                <span class="text-red-400">2.88 vs 2.19</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Home Goods (≤7 vs >7):</span>
+                                <span class="text-red-400">2.98 vs 2.14</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-yellow-400">Key Threshold</h4>
+                        <p class="text-sm text-gray-300 mb-3">
+                            All categories show significant rating drops after day 7, confirming operational bottleneck
+                        </p>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold tech-gradient">Day 7</div>
+                            <div class="text-xs text-gray-400">Critical shipping threshold</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                    Clear evidence shows customer ratings decline dramatically after 7-day shipping threshold across all categories
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visualization 2: Supplier Weather Heatmap -->
+    <section class="min-h-screen py-20 bg-gray-900 relative flex items-center">
+        <div class="container mx-auto px-6" id="chart2-section">
+            <h2 class="text-5xl font-bold text-center mb-16">
+                Supplier Performance by
+                <span class="tech-gradient">Weather Conditions</span>
+            </h2>
+            
+            <div class="grid lg:grid-cols-4 gap-8 mb-8">
+                <div class="lg:col-span-3">
+                    <div class="card-gradient p-8 rounded-2xl h-full flex flex-col">
+                        <div id="heatmapContainer" class="w-full flex-1 flex flex-col justify-center">
+                            <div class="heatmap-grid" id="heatmapGrid">
+                                <!-- Heatmap will be generated here -->
+                            </div>
+                            <div class="flex justify-center mt-6">
+                                <div class="flex items-center space-x-4 text-sm">
+                                    <span class="text-gray-300">Shipping Time:</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 rounded" style="background: #4ade80;"></div>
+                                        <span class="text-gray-300">Fast (5.2-5.4 days)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 rounded" style="background: #fbbf24;"></div>
+                                        <span class="text-gray-300">Medium (5.4-5.6 days)</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-4 h-4 rounded" style="background: #ef4444;"></div>
+                                        <span class="text-gray-300">Slow (5.6+ days)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-6">
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-cyan-400">Weather Averages</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fas fa-sun text-yellow-400 mr-2"></i>
+                                    Sunny
+                                </span>
+                                <span class="text-green-400 font-bold">5.51</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fas fa-snowflake text-cyan-400 mr-2"></i>
+                                    Snowy
+                                </span>
+                                <span class="text-yellow-400 font-bold">5.47</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="flex items-center">
+                                    <i class="fas fa-cloud-rain text-blue-400 mr-2"></i>
+                                    Rainy
+                                </span>
+                                <span class="text-red-400 font-bold">5.54</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-green-400">Supplier Averages</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span>Supplier C:</span>
+                                <span class="text-green-400">5.41</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Supplier B:</span>
+                                <span class="text-green-400">5.44</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Supplier D:</span>
+                                <span class="text-yellow-400">5.55</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Supplier A:</span>
+                                <span class="text-orange-400">5.58</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Supplier E:</span>
+                                <span class="text-red-400">5.60</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-gradient p-6 rounded-xl">
+                        <h4 class="text-xl font-bold mb-3 text-purple-400">Performance Range</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Best combination:</span>
+                                <span class="text-green-400">B+C in Snow (5.24)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Worst combination:</span>
+                                <span class="text-red-400">E in Snow (5.88)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Total variance:</span>
+                                <span class="text-yellow-400">0.64 days</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Weather condition details -->
+            <div class="grid md:grid-cols-3 gap-6 mt-12">
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <i class="fas fa-sun text-yellow-400 text-3xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">Sunny Conditions</h4>
+                    <p class="text-gray-300 mb-4">Best overall weather performance</p>
+                    <div class="text-2xl font-bold tech-gradient">5.51</div>
+                    <div class="text-xs text-gray-400">days average</div>
+                </div>
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <i class="fas fa-cloud-rain text-blue-400 text-3xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">Rainy Weather</h4>
+                    <p class="text-gray-300 mb-4">Highest impact on shipping times</p>
+                    <div class="text-2xl font-bold tech-gradient">5.54</div>
+                    <div class="text-xs text-gray-400">days average</div>
+                </div>
+                <div class="text-center p-6 card-gradient rounded-xl">
+                    <i class="fas fa-snowflake text-cyan-400 text-3xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">Snowy Conditions</h4>
+                    <p class="text-gray-300 mb-4">Variable impact by supplier</p>
+                    <div class="text-2xl font-bold tech-gradient">5.47</div>
+                    <div class="text-xs text-gray-400">days average</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Recommendations -->
+    <section class="min-h-screen py-20 gradient-bg relative flex items-center">
+        <div class="absolute inset-0 bg-black opacity-30"></div>
+        <div class="container mx-auto px-6 relative z-10" id="recommendations">
+            <h2 class="text-6xl font-bold text-center mb-16">
+                Strategic <span class="tech-gradient">Recommendations</span>
+            </h2>
+            
+            <div class="grid lg:grid-cols-3 gap-8 mb-12">
+                <div class="card-gradient p-8 rounded-2xl">
+                    <h3 class="text-3xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-target text-green-400 mr-4"></i>
+                        Operational KPIs
+                    </h3>
+                    <ul class="space-y-4 text-lg text-gray-200">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mr-3 mt-1"></i>
+                            Set maximum 7-day shipping targets
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mr-3 mt-1"></i>
+                            Investigate root causes of delays
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mr-3 mt-1"></i>
+                            Differentiate targets by category tolerance
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-400 mr-3 mt-1"></i>
+                            Monitor daily performance metrics
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="card-gradient p-8 rounded-2xl">
+                    <h3 class="text-3xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-shield-alt text-blue-400 mr-4"></i>
+                        Risk Mitigation
+                    </h3>
+                    <ul class="space-y-4 text-lg text-gray-200">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-blue-400 mr-3 mt-1"></i>
+                            Diversify supplier base by region
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-blue-400 mr-3 mt-1"></i>
+                            Weather-based delivery adjustments
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-blue-400 mr-3 mt-1"></i>
+                            Implement supplier SLAs with weather clauses
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-blue-400 mr-3 mt-1"></i>
+                            Establish backup supplier networks
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-gradient p-8 rounded-2xl">
+                    <h3 class="text-3xl font-bold mb-6 flex items-center">
+                        <i class="fas fa-chart-line text-purple-400 mr-4"></i>
+                        Supplier Strategy
+                    </h3>
+                    <ul class="space-y-4 text-lg text-gray-200">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-purple-400 mr-3 mt-1"></i>
+                            Prioritize Supplier C partnerships
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-purple-400 mr-3 mt-1"></i>
+                            Address Supplier E weather issues
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-purple-400 mr-3 mt-1"></i>
+                            Negotiate performance incentives
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-purple-400 mr-3 mt-1"></i>
+                            Implement real-time tracking
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Data-driven insights summary -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="card-gradient p-8 rounded-2xl">
+                    <h4 class="text-2xl font-bold mb-4 text-yellow-400">Key Data Points</h4>
+                    <div class="space-y-4">
+                        <div class="flex justify-between text-lg">
+                            <span>7-day threshold impact:</span>
+                            <span class="text-red-400 font-bold">Critical</span>
+                        </div>
+                        <div class="flex justify-between text-lg">
+                            <span>Best supplier performance:</span>
+                            <span class="text-green-400 font-bold">Supplier C</span>
+                        </div>
+                        <div class="flex justify-between text-lg">
+                            <span>Weather variance:</span>
+                            <span class="text-yellow-400 font-bold">0.07 days</span>
+                        </div>
+                        <div class="flex justify-between text-lg border-t border-gray-600 pt-4">
+                            <span>Rating improvement potential:</span>
+                            <span class="text-cyan-400 font-bold">0.67 points</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-gradient p-8 rounded-2xl">
+                    <h4 class="text-2xl font-bold mb-4 text-cyan-400">Implementation Focus</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center p-3 bg-green-400 bg-opacity-20 rounded">
+                            <span>Immediate: Enforce 7-day maximum</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-yellow-400 bg-opacity-20 rounded">
+                            <span>Short-term: Optimize supplier mix</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-blue-400 bg-opacity-20 rounded">
+                            <span>Medium-term: Weather mitigation</span>
+                        </div>
+                        <div class="flex items-center p-3 bg-purple-400 bg-opacity-20 rounded">
+                            <span>Long-term: Performance tracking</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load data and initialize charts
+        fetch('visualization_data.json')
+            .then(response => response.json())
+            .then(data => {
+                initializeCharts(data);
+                initializeAnimations();
+            });
+
+        function initializeCharts(data) {
+            // Chart 1: Shipping Time vs Rating
+            const ctx1 = document.getElementById('ratingChart').getContext('2d');
+            
+            // Prepare data for line chart
+            const categories = data.categories;
+            const ratingData = data.shipping_time_rating_data;
+            
+            const datasets = categories.map((category, index) => {
+                const categoryData = ratingData.filter(item => item.product_category_id === category.product_category_id);
+                const colors = ['#00d4ff', '#00ff88', '#ff6b6b'];
+                
+                return {
+                    label: category.category_name,
+                    data: categoryData.map(item => ({x: item.shipping_time, y: item.avg_rating})),
+                    borderColor: colors[index],
+                    backgroundColor: colors[index] + '20',
+                    borderWidth: 3,
+                    fill: false,
+                    tension: 0.4
+                };
+            });
+
+            new Chart(ctx1, {
+                type: 'line',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: 'white', font: { size: 14 } }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: { display: true, text: 'Shipping Time (Days)', color: 'white' },
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        },
+                        y: {
+                            title: { display: true, text: 'Average Rating', color: 'white' },
+                            ticks: { color: 'white' },
+                            grid: { color: 'rgba(255,255,255,0.1)' }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Heatmap Grid
+            createHeatmap(data);
+        }
+
+        function createHeatmap(data) {
+            const heatmapGrid = document.getElementById('heatmapGrid');
+            const supplierData = data.shipping_time_by_supplier_weather;
+            const suppliers = data.suppliers;
+            const weatherConditions = data.weather_conditions.sort((a, b) => a.weather_condition_id - b.weather_condition_id);
+            
+            // Find min and max values for color scaling
+            const values = supplierData.map(item => item.avg_shipping_time);
+            const minValue = Math.min(...values);
+            const maxValue = Math.max(...values);
+            
+            // Clear existing content
+            heatmapGrid.innerHTML = '';
+            
+            // Create header row
+            // Empty top-left cell
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'heatmap-cell heatmap-header';
+            heatmapGrid.appendChild(emptyCell);
+            
+            // Supplier headers
+            suppliers.forEach(supplier => {
+                const headerCell = document.createElement('div');
+                headerCell.className = 'heatmap-cell heatmap-header';
+                headerCell.textContent = `Supplier ${supplier.supplier_name}`;
+                heatmapGrid.appendChild(headerCell);
+            });
+            
+            // Create data rows
+            weatherConditions.forEach(weather => {
+                // Weather condition label
+                const labelCell = document.createElement('div');
+                labelCell.className = 'heatmap-cell heatmap-label';
+                labelCell.innerHTML = `<i class="fas fa-${getWeatherIcon(weather.weather_condition_name)} mr-2"></i>${weather.weather_condition_name}`;
+                heatmapGrid.appendChild(labelCell);
+                
+                // Data cells for each supplier
+                suppliers.forEach(supplier => {
+                    const dataPoint = supplierData.find(item => 
+                        item.supplier_id === supplier.supplier_id && 
+                        item.weather_condition_id === weather.weather_condition_id
+                    );
+                    
+                    const valueCell = document.createElement('div');
+                    valueCell.className = 'heatmap-cell heatmap-value';
+                    
+                    if (dataPoint) {
+                        const value = dataPoint.avg_shipping_time;
+                        valueCell.textContent = value.toFixed(1);
+                        valueCell.style.backgroundColor = getHeatmapColor(value, minValue, maxValue);
+                        
+                        // Add hover tooltip
+                        valueCell.title = `${weather.weather_condition_name} - Supplier ${supplier.supplier_name}: ${value.toFixed(2)} days`;
+                    }
+                    
+                    heatmapGrid.appendChild(valueCell);
+                });
+            });
+        }
+        
+        function getHeatmapColor(value, min, max) {
+            // Normalize value between 0 and 1
+            const normalized = (value - min) / (max - min);
+            
+            // Create color gradient from green (fast) to red (slow)
+            if (normalized < 0.33) {
+                return `rgb(${Math.round(74 + normalized * 3 * 181)}, ${Math.round(222)}, ${Math.round(128)})`;  // Green to yellow
+            } else if (normalized < 0.67) {
+                const localNorm = (normalized - 0.33) / 0.34;
+                return `rgb(${Math.round(251)}, ${Math.round(191 - localNorm * 127)}, ${Math.round(36)})`;  // Yellow to orange
+            } else {
+                const localNorm = (normalized - 0.67) / 0.33;
+                return `rgb(${Math.round(239)}, ${Math.round(68 - localNorm * 68)}, ${Math.round(68)})`;  // Orange to red
+            }
+        }
+        
+        function getWeatherIcon(weatherName) {
+            switch(weatherName.toLowerCase()) {
+                case 'sunny': return 'sun';
+                case 'rainy': return 'cloud-rain';
+                case 'snowy': return 'snowflake';
+                default: return 'cloud';
+            }
+        }
+
+        function initializeAnimations() {
+            // Scroll-triggered animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all animated elements
+            document.querySelectorAll('#insights, #insight1, #insight2, #insight3, #chart1-section, #chart2-section, #recommendations').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(50px)';
+                el.style.transition = 'all 0.8s ease-out';
+                observer.observe(el);
+            });
+
+            // Hero animation on load
+            window.addEventListener('load', () => {
+                const hero = document.getElementById('hero');
+                hero.style.opacity = '0';
+                hero.style.transform = 'translateY(30px)';
+                hero.style.transition = 'all 1s ease-out';
+                
+                setTimeout(() => {
+                    hero.style.opacity = '1';
+                    hero.style.transform = 'translateY(0)';
+                }, 300);
+            });
+        }
+    </script>
+</body>
+</html>
